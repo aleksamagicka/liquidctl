@@ -119,6 +119,14 @@ class Aquacomputer(UsbHidDriver):
             "fan_voltage_label": [f"Fan {num} voltage" for num in range(1, 8 + 1)],
             "fan_current_label": [f"Fan {num} current" for num in range(1, 8 + 1)],
             "status_report_length": 0x147,
+            "ctrl_report_length": 0x65F,
+            "fan_ctrl": {
+                name: offset
+                for (name, offset) in zip(
+                    [f"fan{i}" for i in range(1, 8 + 1)],
+                    [0x5A, 0xAF, 0x104, 0x159, 0x1AE, 0x203, 0x258, 0x2AD],
+                )
+            },
         },
         _DEVICE_QUADRO: {
             "type": _DEVICE_QUADRO,
@@ -354,10 +362,7 @@ class Aquacomputer(UsbHidDriver):
             raise NotSupportedByDevice()
 
     def set_fixed_speed(self, channel, duty, **kwargs):
-        if (
-            self._device_info["type"] == self._DEVICE_OCTO
-            or self._device_info["type"] == self._DEVICE_QUADRO
-        ):
+        if self._device_info["type"] == self._DEVICE_QUADRO:
             # Not yet implemented
             raise NotSupportedByDriver()
         elif self._device_info["type"] == self._DEVICE_FARBWERK360:

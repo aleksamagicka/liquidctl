@@ -573,7 +573,7 @@ def test_octo_get_status_from_hwmon(mockOctoDevice, tmp_path):
     assert sorted(got) == sorted(expected)
 
 
-def test_octo_set_fixed_speeds_not_supported(mockOctoDevice):
+def test_octo_set_fixed_speeds(mockOctoDevice):
     mockOctoDevice.set_fixed_speed("fan1", 50)
     mockOctoDevice.set_fixed_speed("fan2", 84)
 

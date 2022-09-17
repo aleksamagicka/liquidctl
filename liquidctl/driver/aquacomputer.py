@@ -139,6 +139,14 @@ class Aquacomputer(UsbHidDriver):
             "fan_current_label": [f"Fan {num} current" for num in range(1, 4 + 1)],
             "flow_sensor_offset": 0x6E,
             "status_report_length": 0xDC,
+            "ctrl_report_length": 0x3C1,
+            "fan_ctrl": {
+                name: offset
+                for (name, offset) in zip(
+                    [f"fan{i}" for i in range(1, 4 + 1)],
+                    [0x36, 0x8B, 0xE0, 0x135],
+                )
+            },
         },
     }
 
@@ -362,10 +370,7 @@ class Aquacomputer(UsbHidDriver):
             raise NotSupportedByDevice()
 
     def set_fixed_speed(self, channel, duty, **kwargs):
-        if self._device_info["type"] == self._DEVICE_QUADRO:
-            # Not yet implemented
-            raise NotSupportedByDriver()
-        elif self._device_info["type"] == self._DEVICE_FARBWERK360:
+        if self._device_info["type"] == self._DEVICE_FARBWERK360:
             raise NotSupportedByDevice()
 
         if "ctrl_report_length" in self._device_info:
